@@ -1,0 +1,14 @@
+docker build -t nextjs-docker .
+docker tag nextjs-docker:latest europe-west1-docker.pkg.dev/xzist-software/xzist-frontend/my-nextjs-image:tag1
+docker push europe-west1-docker.pkg.dev/xzist-software/xzist-frontend/my-nextjs-image:tag1
+
+docker build -t my-feathers-image .
+docker tag my-feathers-image:latest europe-west1-docker.pkg.dev/xzist-software/xzist-backend/my-feathers-image:tag1
+docker push europe-west1-docker.pkg.dev/xzist-software/xzist-backend/my-feathers-image:tag1
+
+
+mongodb://127.0.0.1:27017/backend
+"mongodb+srv://xzist:xzistpass123@cluster0.ui369qr.mongodb.net/?retryWrites=true&w=majority",
+
+
+change mongodb url and change backend url   

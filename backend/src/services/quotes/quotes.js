@@ -1,0 +1,48 @@
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+
+import { hooks as schemaHooks } from '@feathersjs/schema'
+import {
+  quotesDataValidator,
+  quotesPatchValidator,
+  quotesQueryValidator,
+  quotesResolver,
+  quotesExternalResolver,
+  quotesDataResolver,
+  quotesPatchResolver,
+  quotesQueryResolver
+} from './quotes.schema.js'
+import { QuotesService, getOptions } from './quotes.class.js'
+
+export * from './quotes.class.js'
+export * from './quotes.schema.js'
+
+// A configure function that registers the service and its hooks via `app.configure`
+export const quotes = (app) => {
+  // Register our service on the Feathers application
+  app.use('quotes', new QuotesService(getOptions(app)), {
+    // A list of all methods this service exposes externally
+    methods: ['find', 'get', 'create', 'patch', 'remove'],
+    // You can add additional custom events to be sent to clients here
+    events: []
+  })
+  // Initialize hooks
+  app.service('quotes').hooks({
+    around: {
+      all: [schemaHooks.resolveExternal(quotesExternalResolver), schemaHooks.resolveResult(quotesResolver)]
+    },
+    before: {
+      all: [schemaHooks.validateQuery(quotesQueryValidator), schemaHooks.resolveQuery(quotesQueryResolver)],
+      find: [],
+      get: [],
+      create: [schemaHooks.validateData(quotesDataValidator), schemaHooks.resolveData(quotesDataResolver)],
+      patch: [schemaHooks.validateData(quotesPatchValidator), schemaHooks.resolveData(quotesPatchResolver)],
+      remove: []
+    },
+    after: {
+      all: []
+    },
+    error: {
+      all: []
+    }
+  })
+}
